@@ -136,3 +136,28 @@ Here is the execution output of this ad hoc command. we have three commands in t
         name: nginx
         state: restarted
 ```
+
+
+## Task
+
+```Sh
+
+---
+
+- hosts: web
+  gather_facts: yes
+  become: true
+
+  tasks:
+    - name: "Add nodejs apt key"
+      apt_key:
+        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+        state: present
+
+    - name: "Install nodejs"
+      apt:
+       update_cache: yes
+       name: nodejs
+       state: present
+
+```
