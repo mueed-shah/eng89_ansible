@@ -65,3 +65,26 @@ Vagrant.configure("2") do |config|
 end
 ```
 ![diagram](diagram-ansible.png)
+
+- To add a machine to the list of hosts you direct to /etc/ansible/hosts start with IP, type of connection, username and password: `192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=`
+- To ping a host you can use `ansible all -m ping` replace `all` with the name of the machines
+- To execute `uname` in all of the machines in the hosts file you can do `ansible all -a "uname -a"`
+- To check dates in location of all machines `ansible web -a "date"`
+- To check memory status `ansible all -a "free"`
+- To check uptime of all servers `ansible all -a "uptime"` or `ansible multi -a uptime` 
+- To reboot the server `ansible all -m reboot -a reboot_timeout=3600 -u vagrant -i ansible_hosts -b` 
+```Sh
+Here
+
+-m – represents the module
+
+-a – additional parameter to the reboot module to set the timeout to 3600 seconds
+
+-u – remote SSH user
+
+-i – inventory file
+
+-b – to instruct ansible to become root user before executing the task
+
+Here is the execution output of this ad hoc command. we have three commands in this screenshot, First is to check the status and second to reboot and third one is to check the uptime
+```
