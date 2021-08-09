@@ -117,5 +117,22 @@ Here is the execution output of this ad hoc command. we have three commands in t
 # update cache
 # restart nginx if reverse proxy is implemented or if needed
 ```
-
+- To execute a .yml `ansible-playbook name.yml`
 - To check if nginx is running `ansible web -m shell -a "systemctl status nginx"` then connect to IP
+- To restart nginx and allow Nginx port 80 and restart do the following:
+```Sh
+# restart nginx if reverse proxy is implemented or if needed
+    notify:
+      - restart nginx
+  - name: Allow all access to tcp port 80
+    ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+```
