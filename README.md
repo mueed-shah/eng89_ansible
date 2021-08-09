@@ -88,3 +88,34 @@ Here
 
 Here is the execution output of this ad hoc command. we have three commands in this screenshot, First is to check the status and second to reboot and third one is to check the uptime
 ```
+- to defdine name of hosts `- hosts: web`
+- to gather info about host `gather_facts: yes`
+- need admin access `become:true`
+- in .yml `apt: pkg=nginx` install nginx
+```Sh
+# This is a playbook to install and set up Nginx in our web server (192.168.33.10)
+# This playbook is written in YAML and YAML starts with three dashes (front matter)
+
+---
+# name of the hosts - hosts is to define the name of your host of all
+- hosts: web
+
+# find the facts about the host
+  gather_facts: yes
+
+# admin access
+  become: true
+
+# instructions using task module in ansible
+  tasks:
+  - name: Install Nginx
+
+# install nginx
+    apt: pkg=nginx state=present update_cache=yes
+
+# ensure it's running/active
+# update cache
+# restart nginx if reverse proxy is implemented or if needed
+```
+
+- To check if nginx is running `ansible web -m shell -a "systemctl status nginx"` then connect to IP
