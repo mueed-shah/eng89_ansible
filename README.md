@@ -161,3 +161,24 @@ Here is the execution output of this ad hoc command. we have three commands in t
        state: present
 
 ```
+
+- What is IAC: No manual handling, run 1 command and everything is done for us
+- Playbook are list of tasks that allow us to automate tasks enforces IAC
+
+```Sh
+# on the web server we would like to install nodejs with required dependencies so we could launch the nodeapp on the web servers IP
+
+# then moving onto configuring reverse proxy with nginx wso we would launch the app on port 80 instead of 3000
+
+hosts: web
+gather_facts: yes
+
+# instruction in this playbook to install nodejs
+# tasks: install nodejs
+
+# copy the app code to web server ( you can clone repo from controller to web or os to web)
+
+# go to right location install npm cd app 
+# npm start
+```
+

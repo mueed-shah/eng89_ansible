@@ -20,9 +20,13 @@ Vagrant.configure("2") do |config|
     
     web.vm.network :private_network, ip: "192.168.33.10"
     #   assigning private IP
+    web.vm.synced_folder "environment", "/home/vagrant/environment"
+    
+    web.vm.synced_folder "app", "/home/vagrant/app"
     
     config.hostsupdater.aliases = ["development.web"]
     # creating a link called development.web so we can access web page with this link instread of an IP   
+
         
   end
   

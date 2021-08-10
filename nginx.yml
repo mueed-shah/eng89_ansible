@@ -1,0 +1,45 @@
+  tasks:
+  - name: Install Nginx
+    apt: pkg=nginx state=present update_cache=yes
+    notify:
+      - restart nginx
+  - name: Allow all access to tcp port 80
+    ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Remove nginx deafault file (delete file)
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: create the file to put default in
+      file:
+        path: /etc/nginx/sites-available/default
+        state: touch
+        mode: 0644
+
+    - name: "change default file"
+      blockinfile:
+        path: /etc/nginx/sites-available/default
+        block: |
+          server{
+            listen 80;
+            server_name _;
+            location / {
+            proxy_pass http://192.168.33.10:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host \$host;
+            proxy_cache_bypass \$http_upgrade;
+            }
+          }
+
