@@ -270,3 +270,19 @@ vagrant@controller:~/.ssh$ tree
 - Create new SSH keys in .ssh folder using `ssh-keygen -t rsa -b 4096 -f ~/.ssh/{name}` 
 - Create a pass.yml in `ansible/group_vars/all/` and enter AWS access and secret key
 - to create the instance you need to specify pass and tag `ansible-playbook playbook.yml --ask-vault-pass --tags create_ec2` 
+- ping the aws host in controller to test `sudo ansible aws -m ping --ask-vault-pass`
+
+## Hosts config
+```
+[web]
+192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+[db]
+192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+[aws]
+ec2-instance ansible_host=54.171.73.122 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/eng89_devops.pem
+
+[aws2]
+ec2-instance ansible_host=54.170.164.155 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/eng89_devops.pem
+```

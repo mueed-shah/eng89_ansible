@@ -1,6 +1,7 @@
 .vagrant/
+.vagrant
+.git
 app/
-.app/
 environment/
-.environment/
+
 
