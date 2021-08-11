@@ -181,4 +181,92 @@ gather_facts: yes
 # go to right location install npm cd app 
 # npm start
 ```
+## AWS YML FILE
+```YML
+# playbook for launchin an aws ec2 instance
 
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: True
+  become: True
+  vars:
+    key_name: eng89_devops
+    region: eu-west-1
+    image: ami-0a6e6cb27b2ee4a95
+    id: "eng89_devops playbook to launch an EC2 Instance #2"
+    sec_group: "sg-01f0ea5d8295d46c5"
+    subnet_id: "subnet-0429d69d55dfad9d2"
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+
+    - name: facts
+      block:
+
+      - name: get instance gather_facts
+        ec2_instance_facts:
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+          region: "{{ region }}"
+        register: result
+
+    - name: provisioning ec2 instances
+      block:
+
+      - name: upload public key to aws_access_key
+        ec2_key:
+          name: "{{ key_name }}"
+          key_material: "{{ lookup('file', '~/.ssh/{{ key_name }}.pub') }}"
+          region: "{{ region }}"
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+
+      - name: provision instance
+        ec2:
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+          assign_public_ip: True
+          key_name: "{{ key_name }}"
+          id: "{{ id }}"
+          vpc_subnet_id: "{{ subnet_id }}"
+          group_id: "{{ sec_group }}"
+          image: "{{ image }}"
+          instance_type: t2.micro
+          region: "{{ region }}"
+          wait: True
+          count: 1
+          instance_tags:
+            Name: eng89_mueed_app_ansiblepb
+
+      tags: ['never', 'create_ec2']
+```
+Ansible dir tree
+```Sh
+vagrant@controller:/etc/ansible$ tree
+.
+├── ansible.cfg
+├── ec2_instance.yml
+├── group_vars
+│   └── all
+│       └── pass.yml
+├── hosts
+├── mongodb.yml
+├── node2.yml
+├── node.yml
+└── roles
+```
+.ssh dir tree
+```
+vagrant@controller:~/.ssh$ tree
+.
+├── authorized_keys        
+├── eng89_devops
+├── eng89_devops.pem       
+├── eng89_devops.pub       
+└── known_hosts
+```
+- Move .pem file to .ssh folder in the ansible controller
+- Create new SSH keys in .ssh folder using `ssh-keygen -t rsa -b 4096 -f ~/.ssh/{name}` 
+- Create a pass.yml in `ansible/group_vars/all/` and enter AWS access and secret key
+- to create the instance you need to specify pass and tag `ansible-playbook playbook.yml --ask-vault-pass --tags create_ec2` 

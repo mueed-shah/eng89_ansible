@@ -28,14 +28,35 @@
         production: yes
         state: present
 
-    - name: Stop APP
-      shell: pm2 kill
-      args:
-        chdir: /home/vagrant/app/
-      ignore_errors: yes
+    # Configuration so we can connect to the database
+    - name: Exporting the DB_HOST
+      become_user: root
+      shell: |
+        export DB_HOST=mongodb://192.168.10.150:27017/posts >> ~/.bashrc
+        cd
+        cd app
+        pm2 kill
+        
+  
+    - name: Installing node prerequisites and seeding from the database
+      shell: |
+        cd app
+        pm2 start
+        node seeds/seed.js
 
-    - name: Start APP
-      shell: pm2 start app.js
-      args:
-        chdir: /home/vagrant/app/
-      ignore_errors: yes
+    # - name: Starting the app
+    #   shell: |
+    #     pm2 kill
+    #     pm2 start app.js
+
+    # - name: Stop APP
+    #   shell: pm2 kill
+    #   args:
+    #     chdir: /home/vagrant/app/
+    #   ignore_errors: yes
+
+    # - name: Start APP
+    #   shell: pm2 start app.js
+    #   args:
+    #     chdir: /home/vagrant/app/
+    #   ignore_errors: yes
