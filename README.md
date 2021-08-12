@@ -292,7 +292,7 @@ ec2-instance ansible_host=54.170.164.155 ansible_user=ubuntu ansible_ssh_private
 {
   "variables": {
     "instance_size": "t2.micro",
-    "ami_name": "eng89_mueed_ami_packer",
+    "ami_name": "eng89_mueed_ami_packer_2",
     "base_ami": "ami-0a6e6cb27b2ee4a95",
     "ssh_username": "ubuntu",
     "vpc_id": "vpc-07e47e9d90d2076da",
@@ -305,8 +305,8 @@ ec2-instance ansible_host=54.170.164.155 ansible_user=ubuntu ansible_ssh_private
     "source_ami": "{{user `base_ami`}}",
     "instance_type": "{{user `instance_size`}}",
     "ssh_username": "{{user `ssh_username`}}",
-    "access_key": "X",
-    "secret_key": "X",
+    "access_key": "{{user `AWS_ACCESS_KEY_ID`}}",
+    "secret_key": "{{user `AWS_SECRET_ACCESS_KEY`}}",
     "ami_name": "{{user `ami_name`}}",
     "ssh_pty" : "true",
     "vpc_id": "{{user `vpc_id`}}",
