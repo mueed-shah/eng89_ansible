@@ -286,3 +286,36 @@ ec2-instance ansible_host=54.171.73.122 ansible_user=ubuntu ansible_ssh_private_
 [aws2]
 ec2-instance ansible_host=54.170.164.155 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/eng89_devops.pem
 ```
+
+## Creating AMI with PACKER
+```JSON
+{
+  "variables": {
+    "instance_size": "t2.micro",
+    "ami_name": "eng89_mueed_ami_packer",
+    "base_ami": "ami-0a6e6cb27b2ee4a95",
+    "ssh_username": "ubuntu",
+    "vpc_id": "vpc-07e47e9d90d2076da",
+    "subnet_id": "subnet-0429d69d55dfad9d2"
+  },
+  "builders": [
+  {
+    "type": "amazon-ebs",
+    "region": "eu-west-1",
+    "source_ami": "{{user `base_ami`}}",
+    "instance_type": "{{user `instance_size`}}",
+    "ssh_username": "{{user `ssh_username`}}",
+    "access_key": "X",
+    "secret_key": "X",
+    "ami_name": "{{user `ami_name`}}",
+    "ssh_pty" : "true",
+    "vpc_id": "{{user `vpc_id`}}",
+    "subnet_id": "{{user `subnet_id`}}",
+    "tags": {
+    "Name": "App Name",
+    "BuiltBy": "Packer"
+    }
+  }
+]
+}
+```

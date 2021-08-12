@@ -3,5 +3,6 @@
 .git
 app/
 environment/
+nginx.pkr.json
 
 
