@@ -1,0 +1,36 @@
+{
+  "variables": {
+    "nginx_ver": "1.15.6",
+    "pcre_ver": "8.42",
+    "zlib_ver": "1.2.11",
+    "openssl_ver": "1.1.0h",
+    "geoip_ver": "20180403",
+
+    "working_dir": "/opt",
+    "src_folder": "src_files",
+    "deb_pkg_folder": "deb_pkg",
+    "log_folder": "log",
+    "log_file": "install_source.log"
+    },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-west-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+        "root-device-type": "ebs"
+        },
+      "owners": ["099720109477"],
+      "most_recent": true
+      },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "custom_nginx_ubuntu_{{timestamp}}",
+    "vpc_id": "vpc-xxxxxxxx",
+    "subnet_id": "subnet-xxxxxxxx",
+    "associate_public_ip_address": "true"
+    }]
+}
