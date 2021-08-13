@@ -319,3 +319,5 @@ ec2-instance ansible_host=54.170.164.155 ansible_user=ubuntu ansible_ssh_private
 ]
 }
 ```
+
+![diagram](ansible_diagram.png)
